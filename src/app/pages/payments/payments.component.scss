@@ -1,0 +1,153 @@
+.payments-page {
+    max-width: 1200px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 0.25rem;
+    }
+
+    p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+}
+
+.search-bar {
+    margin-bottom: 1.25rem;
+
+    .search-input {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+}
+
+.method-tag {
+    font-size: 0.78rem;
+    background: #f0f0f0;
+    color: #555;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.transaction-id {
+    font-size: 0.75rem;
+    color: #888;
+    font-family: monospace;
+    background: #f5f5f5;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.empty-message {
+    text-align: center;
+    color: #aaa;
+    padding: 2rem;
+}
+
+.payment-form,
+.status-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 0.5rem 0;
+}
+
+.payment-detail {
+    padding: 0.5rem 0;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &.full {
+        grid-column: 1 / -1;
+    }
+
+    .detail-label {
+        font-size: 0.75rem;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+        font-size: 0.9rem;
+        color: #1a1a1a;
+        font-weight: 500;
+
+        &.amount {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        &.transaction {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #555;
+            word-break: break-all;
+        }
+    }
+}
+
+.current-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #555;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}

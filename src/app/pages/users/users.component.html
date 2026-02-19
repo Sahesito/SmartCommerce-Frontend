@@ -1,0 +1,148 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="users-page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1>Usuarios</h1>
+            <p>Gestiona los usuarios del sistema</p>
+        </div>
+        <p-button label="Nuevo Usuario" icon="pi pi-plus" (onClick)="openCreate()" />
+    </div>
+
+    <!-- Búsqueda -->
+    <div class="search-bar">
+        <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar por nombre o correo..." class="search-input" />
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-container">
+        <p-table [value]="filteredUsers" [loading]="loading" [paginator]="true" [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '60rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Teléfono</th>
+                    <th>Ciudad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>
+                        <div class="user-name">
+                            <div class="avatar">
+                                {{ user.firstName[0] }}{{ user.lastName[0] }}
+                            </div>
+                            <span>{{ user.firstName }} {{ user.lastName }}</span>
+                        </div>
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <p-tag [value]="getRoleLabel(user.role)" [severity]="getRoleSeverity(user.role)" />
+                    </td>
+                    <td>{{ user.phone || '—' }}</td>
+                    <td>{{ user.city || '—' }}</td>
+                    <td>
+                        <p-tag [value]="user.active ? 'Activo' : 'Inactivo'"
+                            [severity]="user.active ? 'success' : 'danger'" />
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <p-button icon="pi pi-pencil" [text]="true" size="small" pTooltip="Editar"
+                                (onClick)="openEdit(user)" />
+                            @if (user.active) {
+                            <p-button icon="pi pi-ban" [text]="true" severity="danger" size="small"
+                                pTooltip="Desactivar" (onClick)="confirmDelete(user)" />
+                            } @else {
+                            <p-button icon="pi pi-check" [text]="true" severity="success" size="small"
+                                pTooltip="Reactivar" (onClick)="reactivate(user)" />
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="empty-message">
+                        No se encontraron usuarios
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>
+
+<!-- Dialog Crear/Editar -->
+<p-dialog [header]="isEditing ? 'Editar Usuario' : 'Nuevo Usuario'" [(visible)]="dialogVisible"
+    [style]="{width: '560px'}" [modal]="true">
+    <div class="user-form">
+
+        <div class="field-row">
+            <div class="field">
+                <label>Nombres *</label>
+                <input pInputText [(ngModel)]="userForm.firstName" placeholder="Juan" class="w-full" />
+            </div>
+            <div class="field">
+                <label>Apellidos *</label>
+                <input pInputText [(ngModel)]="userForm.lastName" placeholder="Pérez" class="w-full" />
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Correo *</label>
+            <input pInputText [(ngModel)]="userForm.email" placeholder="correo@ejemplo.com" class="w-full" />
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label>Rol</label>
+                <p-select [(ngModel)]="userForm.role" [options]="roles" optionLabel="label" optionValue="value"
+                    styleClass="w-full" />
+            </div>
+            <div class="field">
+                <label>Estado</label>
+                <p-select [(ngModel)]="userForm.active" [options]="statusOptions" optionLabel="label"
+                    optionValue="value" styleClass="w-full" />
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Teléfono</label>
+            <input pInputText [(ngModel)]="userForm.phone" placeholder="+51 999 000 000" class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Dirección</label>
+            <input pInputText [(ngModel)]="userForm.address" placeholder="Av. Ejemplo 123" class="w-full" />
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label>Ciudad</label>
+                <input pInputText [(ngModel)]="userForm.city" placeholder="Lima" class="w-full" />
+            </div>
+            <div class="field">
+                <label>País</label>
+                <input pInputText [(ngModel)]="userForm.country" placeholder="Peru" class="w-full" />
+            </div>
+        </div>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="dialogVisible = false" />
+        <p-button [label]="isEditing ? 'Actualizar' : 'Crear'" icon="pi pi-check" [loading]="saving"
+            (onClick)="saveUser()" />
+    </ng-template>
+</p-dialog>

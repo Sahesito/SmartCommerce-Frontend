@@ -1,0 +1,146 @@
+.dashboard {
+    max-width: 1200px;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 0.25rem;
+    }
+
+    p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid #e5e5e5;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &.warning {
+        border-color: #f59e0b;
+        background: #fffbeb;
+    }
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+        font-size: 1.4rem;
+        color: white;
+    }
+
+    &.products {
+        background: #1a1a1a;
+    }
+
+    &.users {
+        background: #444;
+    }
+
+    &.inventory {
+        background: #666;
+    }
+
+    &.orders {
+        background: #888;
+    }
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+
+    .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+.quick-access {
+    h2 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 1rem;
+    }
+}
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.quick-card {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1a1a1a;
+
+    i {
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    .arrow {
+        margin-left: auto;
+        font-size: 0.8rem;
+        color: #aaa;
+    }
+
+    &:hover {
+        border-color: #1a1a1a;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        .arrow {
+            color: #1a1a1a;
+        }
+    }
+}

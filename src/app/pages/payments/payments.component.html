@@ -1,0 +1,198 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="payments-page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1>Pagos</h1>
+            <p>{{ isAdmin() ? 'Gestiona todos los pagos' : 'Mis pagos' }}</p>
+        </div>
+        <p-button label="Registrar Pago" icon="pi pi-plus" (onClick)="openCreate()" />
+    </div>
+
+    <!-- Búsqueda -->
+    <div class="search-bar">
+        <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar por ID, pedido o transacción..."
+            class="search-input" />
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-container">
+        <p-table [value]="filteredPayments" [loading]="loading" [paginator]="true" [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '60rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>#</th>
+                    <th>Pedido</th>
+                    <th>Usuario</th>
+                    <th>Monto</th>
+                    <th>Método</th>
+                    <th>Transacción</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-payment>
+                <tr>
+                    <td><strong>#{{ payment.id }}</strong></td>
+                    <td>Pedido #{{ payment.orderId }}</td>
+                    <td>Usuario #{{ payment.userId }}</td>
+                    <td><strong>S/ {{ payment.amount | number:'1.2-2' }}</strong></td>
+                    <td>
+                        <span class="method-tag">{{ payment.paymentMethod }}</span>
+                    </td>
+                    <td>
+                        <span class="transaction-id">{{ payment.transactionId }}</span>
+                    </td>
+                    <td>
+                        <p-tag [value]="getStatusLabel(payment.status)"
+                            [severity]="getStatusSeverity(payment.status)" />
+                    </td>
+                    <td>{{ payment.createdAt | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <p-button icon="pi pi-eye" [text]="true" size="small" pTooltip="Ver detalle"
+                                (onClick)="openDetail(payment)" />
+                            @if (isAdmin()) {
+                            <p-button icon="pi pi-refresh" [text]="true" severity="info" size="small"
+                                pTooltip="Cambiar estado" (onClick)="openStatusDialog(payment)" />
+                            <p-button icon="pi pi-trash" [text]="true" severity="danger" size="small"
+                                pTooltip="Eliminar" (onClick)="confirmDelete(payment)" />
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9" class="empty-message">
+                        No se encontraron pagos
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>
+
+<!-- Dialog Crear Pago -->
+<p-dialog header="Registrar Pago" [(visible)]="createDialogVisible" [style]="{width: '480px'}" [modal]="true">
+    <div class="payment-form">
+
+        <div class="field-row">
+            <div class="field">
+                <label>ID del Pedido *</label>
+                <p-inputnumber [(ngModel)]="paymentForm.orderId" placeholder="ID del pedido" styleClass="w-full" />
+            </div>
+            <div class="field">
+                <label>Monto *</label>
+                <p-inputnumber [(ngModel)]="paymentForm.amount" mode="decimal" [minFractionDigits]="2" prefix="S/ "
+                    styleClass="w-full" />
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Método de pago *</label>
+            <p-select [(ngModel)]="paymentForm.paymentMethod" [options]="paymentMethods" optionLabel="label"
+                optionValue="value" placeholder="Selecciona un método" styleClass="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Descripción</label>
+            <input pInputText [(ngModel)]="paymentForm.description" placeholder="Descripción del pago..."
+                class="w-full" />
+        </div>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="createDialogVisible = false" />
+        <p-button label="Registrar Pago" icon="pi pi-credit-card" [loading]="saving" (onClick)="createPayment()" />
+    </ng-template>
+</p-dialog>
+
+<!-- Dialog Detalle -->
+<p-dialog header="Detalle del Pago" [(visible)]="detailVisible" [style]="{width: '460px'}" [modal]="true">
+    @if (selectedPayment) {
+    <div class="payment-detail">
+
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">ID Pago</span>
+                <span class="detail-value">#{{ selectedPayment.id }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Estado</span>
+                <p-tag [value]="getStatusLabel(selectedPayment.status)"
+                    [severity]="getStatusSeverity(selectedPayment.status)" />
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Pedido</span>
+                <span class="detail-value">#{{ selectedPayment.orderId }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Usuario</span>
+                <span class="detail-value">#{{ selectedPayment.userId }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Monto</span>
+                <span class="detail-value amount">
+                    S/ {{ selectedPayment.amount | number:'1.2-2' }}
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Método</span>
+                <span class="detail-value">{{ selectedPayment.paymentMethod }}</span>
+            </div>
+            <div class="detail-item full">
+                <span class="detail-label">ID Transacción</span>
+                <span class="detail-value transaction">
+                    {{ selectedPayment.transactionId }}
+                </span>
+            </div>
+            @if (selectedPayment.description) {
+            <div class="detail-item full">
+                <span class="detail-label">Descripción</span>
+                <span class="detail-value">{{ selectedPayment.description }}</span>
+            </div>
+            }
+            <div class="detail-item">
+                <span class="detail-label">Fecha</span>
+                <span class="detail-value">
+                    {{ selectedPayment.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                </span>
+            </div>
+        </div>
+
+    </div>
+    }
+</p-dialog>
+
+<!-- Dialog Cambiar Estado -->
+<p-dialog header="Cambiar Estado del Pago" [(visible)]="statusDialogVisible" [style]="{width: '360px'}" [modal]="true">
+    @if (selectedPayment) {
+    <div class="status-form">
+        <div class="current-status">
+            <span>Estado actual:</span>
+            <p-tag [value]="getStatusLabel(selectedPayment.status)"
+                [severity]="getStatusSeverity(selectedPayment.status)" />
+        </div>
+
+        <div class="field">
+            <label>Nuevo estado</label>
+            <p-select [(ngModel)]="statusRequest.status" [options]="statusOptions" optionLabel="label"
+                optionValue="value" styleClass="w-full" />
+        </div>
+    </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="statusDialogVisible = false" />
+        <p-button label="Actualizar" icon="pi pi-check" [loading]="saving" (onClick)="updateStatus()" />
+    </ng-template>
+</p-dialog>

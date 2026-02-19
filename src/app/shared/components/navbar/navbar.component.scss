@@ -1,0 +1,89 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    height: 60px;
+    background: #1a1a1a;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    text-decoration: none;
+
+    .brand-logo {
+        width: 36px;
+        height: 36px;
+        background: white;
+        color: #1a1a1a;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.85rem;
+    }
+
+    .brand-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: -0.5px;
+    }
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .user-name {
+        font-size: 0.9rem;
+        color: #ccc;
+    }
+
+    .role-badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &.admin {
+            background: white;
+            color: #1a1a1a;
+        }
+
+        &.seller {
+            background: #555;
+            color: white;
+        }
+
+        &.client {
+            background: #333;
+            color: #ccc;
+        }
+    }
+
+    .avatar {
+        background: #444;
+        color: white;
+        font-size: 0.8rem;
+    }
+}

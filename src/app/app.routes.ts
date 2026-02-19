@@ -8,6 +8,8 @@ export const routes: Routes = [
         redirectTo: 'auth/login',
         pathMatch: 'full'
     },
+
+    // Rutas públicas — sin layout
     {
         path: 'auth',
         children: [
@@ -23,52 +25,60 @@ export const routes: Routes = [
             }
         ]
     },
+
+    // Rutas protegidas — con layout (navbar + sidebar)
     {
-        path: 'dashboard',
+        path: '',
+        loadComponent: () =>
+            import('./shared/components/layout/layout.component').then(m => m.LayoutComponent),
         canActivate: [authGuard],
-        loadComponent: () =>
-            import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+        children: [
+            {
+                path: 'dashboard',
+                loadComponent: () =>
+                    import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+            },
+            {
+                path: 'shop',
+                loadComponent: () =>
+                    import('./pages/shop/shop.component').then(m => m.ShopComponent)
+            },
+            {
+                path: 'users',
+                canActivate: [roleGuard],
+                data: { roles: ['ADMIN'] },
+                loadComponent: () =>
+                    import('./pages/users/users.component').then(m => m.UsersComponent)
+            },
+            {
+                path: 'products',
+                canActivate: [roleGuard],
+                data: { roles: ['ADMIN', 'SELLER'] },
+                loadComponent: () =>
+                    import('./pages/products/products.component').then(m => m.ProductsComponent)
+            },
+            {
+                path: 'inventory',
+                canActivate: [roleGuard],
+                data: { roles: ['ADMIN', 'SELLER'] },
+                loadComponent: () =>
+                    import('./pages/inventory/inventory.component').then(m => m.InventoryComponent)
+            },
+            {
+                path: 'orders',
+                loadComponent: () =>
+                    import('./pages/orders/orders.component').then(m => m.OrdersComponent)
+            },
+            {
+                path: 'payments',
+                canActivate: [roleGuard],
+                data: { roles: ['ADMIN', 'CLIENT'] },
+                loadComponent: () =>
+                    import('./pages/payments/payments.component').then(m => m.PaymentsComponent)
+            }
+        ]
     },
-    {
-        path: 'shop',
-        canActivate: [authGuard],
-        loadComponent: () =>
-            import('./pages/shop/shop.component').then(m => m.ShopComponent)
-    },
-    {
-        path: 'users',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['ADMIN'] },
-        loadComponent: () =>
-            import('./pages/users/users.component').then(m => m.UsersComponent)
-    },
-    {
-        path: 'products',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['ADMIN', 'SELLER'] },
-        loadComponent: () =>
-            import('./pages/products/products.component').then(m => m.ProductsComponent)
-    },
-    {
-        path: 'inventory',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['ADMIN', 'SELLER'] },
-        loadComponent: () =>
-            import('./pages/inventory/inventory.component').then(m => m.InventoryComponent)
-    },
-    {
-        path: 'orders',
-        canActivate: [authGuard],
-        loadComponent: () =>
-            import('./pages/orders/orders.component').then(m => m.OrdersComponent)
-    },
-    {
-        path: 'payments',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['ADMIN', 'CLIENT'] },
-        loadComponent: () =>
-            import('./pages/payments/payments.component').then(m => m.PaymentsComponent)
-    },
+
     {
         path: '**',
         redirectTo: 'auth/login'

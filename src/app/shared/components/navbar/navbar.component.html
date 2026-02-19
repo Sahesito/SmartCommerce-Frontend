@@ -1,0 +1,22 @@
+<nav class="navbar">
+    <div class="navbar-brand" routerLink="/dashboard">
+        <span class="brand-logo">SC</span>
+        <span class="brand-name">SmartCommerce</span>
+    </div>
+
+    <div class="navbar-right">
+        @if (currentUser) {
+        <div class="user-info">
+            <span class="role-badge" [ngClass]="getRoleSeverity()">
+                {{ getRoleLabel() }}
+            </span>
+            <span class="user-name">
+                {{ currentUser.firstName }} {{ currentUser.lastName }}
+            </span>
+            <p-avatar [label]="getInitials()" shape="circle" styleClass="avatar" />
+            <p-button icon="pi pi-sign-out" severity="secondary" [text]="true" pTooltip="Cerrar sesión"
+                (onClick)="logout()" />
+        </div>
+        }
+    </div>
+</nav>

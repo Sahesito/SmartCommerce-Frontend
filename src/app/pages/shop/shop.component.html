@@ -1,0 +1,149 @@
+<p-toast />
+
+<div class="shop">
+
+    <!-- Header -->
+    <div class="shop-header">
+        <div>
+            <h1>Tienda</h1>
+            <p>Explora nuestros productos</p>
+        </div>
+        <button class="cart-btn" (click)="cartVisible = true">
+            <i class="pi pi-shopping-cart"></i>
+            <span>Carrito</span>
+            @if (getCartCount() > 0) {
+            <span class="cart-badge">{{ getCartCount() }}</span>
+            }
+        </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters">
+        <input pInputText [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Buscar productos..."
+            class="search-input" />
+        <p-select [(ngModel)]="selectedCategory" [options]="categories" optionLabel="label" optionValue="value"
+            (onChange)="onCategoryChange()" styleClass="category-select" />
+    </div>
+
+    <!-- Productos -->
+    @if (loading) {
+    <div class="products-grid">
+        @for (i of [1,2,3,4,5,6]; track i) {
+        <p-skeleton height="320px" borderRadius="12px" />
+        }
+    </div>
+    } @else if (filteredProducts.length === 0) {
+    <div class="empty-state">
+        <i class="pi pi-search"></i>
+        <p>No se encontraron productos</p>
+    </div>
+    } @else {
+    <div class="products-grid">
+        @for (product of filteredProducts; track product.id) {
+        <div class="product-card">
+            <div class="product-image">
+                <img [src]="product.imageUrl || 'https://placehold.co/300x200?text=Producto'" [alt]="product.name"
+                    (error)="$any($event.target).src='https://placehold.co/300x200?text=Producto'" />
+                <span class="category-tag">{{ product.category }}</span>
+            </div>
+            <div class="product-body">
+                <h3>{{ product.name }}</h3>
+                <p class="description">{{ product.description || 'Sin descripción' }}</p>
+                <div class="product-footer">
+                    <span class="price">S/ {{ product.price | number:'1.2-2' }}</span>
+                    <p-button label="Agregar" icon="pi pi-plus" size="small" (onClick)="addToCart(product)" />
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+</div>
+
+<!-- Carrito Drawer -->
+<p-dialog header="Carrito de Compras" [(visible)]="cartVisible" [style]="{width: '480px'}" position="right"
+    [modal]="true">
+    @if (cart.length === 0) {
+    <div class="empty-cart">
+        <i class="pi pi-shopping-cart"></i>
+        <p>Tu carrito está vacío</p>
+    </div>
+    } @else {
+    <div class="cart-items">
+        @for (item of cart; track item.product.id) {
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <span class="cart-item-name">{{ item.product.name }}</span>
+                <span class="cart-item-price">S/ {{ item.product.price | number:'1.2-2' }}</span>
+            </div>
+            <div class="cart-item-actions">
+                <p-button icon="pi pi-minus" [text]="true" size="small"
+                    (onClick)="updateQuantity(item, item.quantity - 1)" />
+                <span class="quantity">{{ item.quantity }}</span>
+                <p-button icon="pi pi-plus" [text]="true" size="small"
+                    (onClick)="updateQuantity(item, item.quantity + 1)" />
+                <p-button icon="pi pi-trash" severity="danger" [text]="true" size="small"
+                    (onClick)="removeFromCart(item.product.id)" />
+            </div>
+        </div>
+        }
+    </div>
+
+    <p-divider />
+
+    <div class="cart-total">
+        <span>Total</span>
+        <strong>S/ {{ getCartTotal() | number:'1.2-2' }}</strong>
+    </div>
+
+    <p-button label="Proceder al Pago" icon="pi pi-credit-card" styleClass="w-full" (onClick)="openCheckout()" />
+    }
+</p-dialog>
+
+<!-- Checkout Dialog -->
+<p-dialog header="Finalizar Pedido" [(visible)]="checkoutVisible" [style]="{width: '520px'}" [modal]="true">
+    <div class="checkout-form">
+
+        <div class="field">
+            <label>Dirección de envío</label>
+            <input pInputText [(ngModel)]="checkoutData.shippingAddress" placeholder="Av. Ejemplo 123" class="w-full" />
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label>Ciudad</label>
+                <input pInputText [(ngModel)]="checkoutData.shippingCity" placeholder="Lima" class="w-full" />
+            </div>
+            <div class="field">
+                <label>País</label>
+                <input pInputText [(ngModel)]="checkoutData.shippingCountry" placeholder="Peru" class="w-full" />
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Método de pago</label>
+            <p-select [(ngModel)]="checkoutData.paymentMethod" [options]="paymentMethods" optionLabel="label"
+                optionValue="value" placeholder="Selecciona un método" styleClass="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Notas (opcional)</label>
+            <input pInputText [(ngModel)]="checkoutData.notes" placeholder="Instrucciones especiales..."
+                class="w-full" />
+        </div>
+
+        <p-divider />
+
+        <div class="order-summary">
+            <span>Total del pedido</span>
+            <strong>S/ {{ getCartTotal() | number:'1.2-2' }}</strong>
+        </div>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="checkoutVisible = false" />
+        <p-button label="Confirmar Pedido" icon="pi pi-check" [loading]="placingOrder" (onClick)="placeOrder()" />
+    </ng-template>
+</p-dialog>
