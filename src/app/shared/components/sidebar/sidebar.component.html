@@ -1,14 +1,10 @@
 <aside class="sidebar">
-    <nav class="sidebar-nav">
-        @for (item of visibleMenuItems; track item.route) {
-
-        class="nav-item"
-        [routerLink]="item.route"
-        routerLinkActive="active"
-        >
+  <nav class="sidebar-nav">
+    <ng-container *ngFor="let item of visibleMenuItems">
+      <a class="nav-item" [routerLink]="item.route">
         <i [class]="item.icon"></i>
         <span>{{ item.label }}</span>
-
-        }
-    </nav>
+      </a>
+    </ng-container>
+  </nav>
 </aside>

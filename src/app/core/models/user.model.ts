@@ -46,4 +46,9 @@ export interface RegisterRequest {
     email: string;
     password: string;
     role: 'ADMIN' | 'SELLER' | 'CLIENT';
+    phone?: string;
+    address?: string;
+    city?: string;
+    country?: string;
 }
+

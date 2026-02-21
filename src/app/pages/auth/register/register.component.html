@@ -63,6 +63,31 @@
                 </div>
 
                 <div class="field">
+                    <label for="phone">Teléfono <span class="optional">(opcional)</span></label>
+                    <input pInputText id="phone" type="text" [(ngModel)]="registerData.phone"
+                        placeholder="+00 987 654 321" class="w-full" />
+                </div>
+
+                <div class="field">
+                    <label for="address">Dirección <span class="optional">(opcional)</span></label>
+                    <input pInputText id="address" type="text" [(ngModel)]="registerData.address"
+                        placeholder="Av. Ejemplo 123" class="w-full" />
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="city">Ciudad <span class="optional">(opcional)</span></label>
+                        <input pInputText id="city" type="text" [(ngModel)]="registerData.city" placeholder="Lima"
+                            class="w-full" />
+                    </div>
+                    <div class="field">
+                        <label for="country">País <span class="optional">(opcional)</span></label>
+                        <input pInputText id="country" type="text" [(ngModel)]="registerData.country" placeholder="Peru"
+                            class="w-full" />
+                    </div>
+                </div>
+
+                <div class="field">
                     <label for="password">Contraseña</label>
                     <p-password id="password" [(ngModel)]="registerData.password" placeholder="Mínimo 6 caracteres"
                         [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full" />

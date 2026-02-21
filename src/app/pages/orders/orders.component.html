@@ -151,8 +151,8 @@
 </p-dialog>
 
 <!-- Dialog Cambiar Estado -->
-<p-dialog header="Cambiar Estado del Pedido" [(visible)]="statusDialogVisible" [style]="{width: '380px'}"
-    [modal]="true">
+<p-dialog header="Cambiar Estado del Pedido" [(visible)]="statusDialogVisible"
+    [style]="{width: '420px', minHeight: '280px'}" [modal]="true" [resizable]="false">
     @if (selectedOrder) {
     <div class="status-form">
         <div class="current-status">
@@ -164,7 +164,7 @@
         <div class="field">
             <label>Nuevo estado</label>
             <p-select [(ngModel)]="statusRequest.status" [options]="statusOptions" optionLabel="label"
-                optionValue="value" styleClass="w-full" />
+                optionValue="value" styleClass="w-full" appendTo="body" placeholder="Selecciona un estado" />
         </div>
     </div>
     }

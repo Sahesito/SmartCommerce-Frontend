@@ -45,7 +45,7 @@ export class OrdersComponent implements OnInit {
     statusDialogVisible = false;
     saving = false;
     searchTerm = '';
-
+    hiddenOrderIds: Set<number> = new Set();
     selectedOrder: Order | null = null;
 
     statusRequest: OrderStatusUpdateRequest = {
@@ -67,6 +67,7 @@ export class OrdersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.loadHiddenOrders();
         this.loadOrders();
     }
 
@@ -99,6 +100,21 @@ export class OrdersComponent implements OnInit {
                 }
             });
         }
+    }
+
+    loadHiddenOrders(): void {
+        const stored = localStorage.getItem('hiddenOrders');
+        if (stored) {
+            const ids: number[] = JSON.parse(stored);
+            this.hiddenOrderIds = new Set(ids);
+        }
+    }
+
+    hideOrderForUser(orderId: number): void {
+        this.hiddenOrderIds.add(orderId);
+        localStorage.setItem('hiddenOrders',
+            JSON.stringify([...this.hiddenOrderIds])
+        );
     }
 
     openDetail(order: Order): void {
@@ -147,10 +163,18 @@ export class OrdersComponent implements OnInit {
                 this.orderService.cancel(order.id).subscribe({
                     next: () => {
                         this.messageService.add({
-                            severity: 'success',
-                            summary: 'Cancelado',
-                            detail: `Pedido #${order.id} cancelado`
+                            severity: 'info',
+                            summary: 'Pedido cancelado',
+                            detail: `Pedido #${order.id} cancelado. Desaparecerá en 10 segundos.`
                         });
+
+                        if (this.authService.isClient()) {
+                            setTimeout(() => {
+                                this.hideOrderForUser(order.id);
+                                this.loadOrders();
+                            }, 10000);
+                        }
+
                         this.loadOrders();
                     },
                     error: (err) => {
@@ -232,8 +256,14 @@ export class OrdersComponent implements OnInit {
     }
 
     get filteredOrders(): Order[] {
-        if (!this.searchTerm) return this.orders;
-        return this.orders.filter(o =>
+        let orders = this.orders;
+
+        if (this.authService.isClient()) {
+            orders = orders.filter(o => !this.hiddenOrderIds.has(o.id));
+        }
+
+        if (!this.searchTerm) return orders;
+        return orders.filter(o =>
             o.id.toString().includes(this.searchTerm) ||
             o.userId.toString().includes(this.searchTerm) ||
             o.status.toLowerCase().includes(this.searchTerm.toLowerCase())

@@ -39,7 +39,11 @@ export class RegisterComponent {
         lastName: '',
         email: '',
         password: '',
-        role: 'CLIENT'
+        role: 'CLIENT',
+        phone: '',
+        address: '',
+        city: '',
+        country: ''
     };
 
     confirmPassword = '';

@@ -3,7 +3,6 @@
 
 <div class="inventory-page">
 
-    <!-- Header -->
     <div class="page-header">
         <div>
             <h1>Inventario</h1>
@@ -12,13 +11,11 @@
         <p-button label="Nuevo Registro" icon="pi pi-plus" (onClick)="openCreate()" />
     </div>
 
-    <!-- Búsqueda -->
     <div class="search-bar">
         <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar por producto o ubicación..."
             class="search-input" />
     </div>
 
-    <!-- Tabla -->
     <div class="table-container">
         <p-table [value]="filteredInventory" [loading]="loading" [paginator]="true" [rows]="10"
             [rowsPerPageOptions]="[5, 10, 20]" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '60rem'}">
@@ -86,7 +83,6 @@
 
 </div>
 
-<!-- Dialog Crear/Editar -->
 <p-dialog [header]="isEditing ? 'Editar Inventario' : 'Nuevo Registro de Inventario'" [(visible)]="dialogVisible"
     [style]="{width: '500px'}" [modal]="true">
     <div class="inventory-form">
@@ -133,7 +129,6 @@
     </ng-template>
 </p-dialog>
 
-<!-- Dialog Stock -->
 <p-dialog [header]="stockAction === 'add' ? 'Agregar Stock' : 'Reducir Stock'" [(visible)]="stockDialogVisible"
     [style]="{width: '380px'}" [modal]="true">
     <div class="stock-form">
