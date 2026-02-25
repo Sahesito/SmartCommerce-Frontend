@@ -51,8 +51,7 @@ export class RegisterComponent {
 
     roles = [
         { label: 'Cliente', value: 'CLIENT' },
-        { label: 'Vendedor', value: 'SELLER' },
-        { label: 'Administrador', value: 'ADMIN' }
+        { label: 'Vendedor', value: 'SELLER' }
     ];
 
     constructor(
