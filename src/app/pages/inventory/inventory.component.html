@@ -43,13 +43,15 @@
                     <td>{{ item.reservedQuantity }}</td>
                     <td>
                         <strong>{{ item.availableQuantity }}</strong>
-                    </td>
-                    <td>{{ item.minStockLevel }}</td>
                     <td>
-                        <span class="location-tag">
-                            <i class="pi pi-map-marker"></i>
-                            {{ item.location || '—' }}
-                        </span>
+                        <strong [style.color]="item.lowStock ? '#ef4444' : 'inherit'">
+                            {{ item.availableQuantity }}
+                        </strong>
+                    </td>
+                    <span class="location-tag">
+                        <i class="pi pi-map-marker"></i>
+                        {{ item.location || '—' }}
+                    </span>
                     </td>
                     <td>
                         <p-tag [value]="getStockLabel(item)" [severity]="getStockSeverity(item)" />
