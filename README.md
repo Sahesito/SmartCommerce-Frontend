@@ -1,59 +1,220 @@
-# Frontend
+# SmartCommerce Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+Angular 21 web interface for the SmartCommerce e-commerce platform. Provides a responsive UI with role-based access control for ADMIN, SELLER, and CLIENT users.
 
-## Development server
+---
 
-To start a local development server, run:
+## Tech Stack
 
-```bash
-ng serve
-```
+| Technology | Version |
+|------------|---------|
+| Angular | 21 |
+| PrimeNG | 21 |
+| TypeScript | 5.9 |
+| SCSS | — |
+| Node.js | 22 |
+| npm | 11 |
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Prerequisites
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js 22.x
+- npm 11.x
+- Angular CLI 21
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Getting Started
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### 1. Clone the repository
 
 ```bash
-ng test
+git clone https://github.com/sahesito/smartcommerce.git
+cd Frontend
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### 2. Install dependencies
 
 ```bash
-ng e2e
+npm install --legacy-peer-deps
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### 3. Run in development mode
 
-## Additional Resources
+```bash
+ng serve --proxy-config proxy.conf.json
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Open `http://localhost:4200`
+
+---
+
+## Proxy Configuration
+
+In development, Angular proxies API requests to the backend microservices:
+
+| Route | Service | Port |
+|-------|---------|------|
+| /auth | Auth Service | 8081 |
+| /users | User Service | 8082 |
+| /products | Product Service | 8083 |
+| /inventory | Inventory Service | 8084 |
+| /orders | Order Service | 8085 |
+| /payments | Payment Service | 8086 |
+
+---
+
+## Production Build
+
+```bash
+npm run build
+```
+
+Output is generated in `dist/Frontend/browser`.
+
+---
+
+
+```bash
+docker pull sahesito/smartcommerce-frontend
+```
+
+Open `http://localhost:4200`
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── core/
+│   │   ├── models/         # TypeScript interfaces
+│   │   ├── services/       # HTTP services
+│   │   └── guards/         # Route guards
+│   ├── pages/
+│   │   ├── login/          # Login page
+│   │   ├── register/       # Register page
+│   │   ├── dashboard/      # Admin dashboard
+│   │   ├── shop/           # Product catalog (CLIENT)
+│   │   ├── users/          # User management (ADMIN)
+│   │   ├── products/       # Product management (ADMIN/SELLER)
+│   │   ├── inventory/      # Inventory management (ADMIN/SELLER)
+│   │   ├── orders/         # Order management
+│   │   └── payments/       # Payment management (ADMIN)
+│   └── shared/
+│       └── components/     # Shared components
+├── environments/
+│   └── environment.ts
+└── proxy.conf.json
+```
+
+---
+
+## Pages & Role Access
+
+| Page | ADMIN | SELLER | CLIENT |
+|------|-------|--------|--------|
+| Login | ✅ | ✅ | ✅ |
+| Register | ✅ | ✅ | ✅ |
+| Dashboard | ✅ | ✅ | ✅ |
+| Shop | ✅ | ✅ | ✅ |
+| Users | ✅ | ❌ | ❌ |
+| Products | ✅ | ✅ | ❌ |
+| Inventory | ✅ | ✅ | ❌ |
+| Orders | ✅ | ✅ | ✅ |
+| Payments | ✅ | ❌ | ❌ |
+
+---
+
+## Authentication
+
+The app uses JWT tokens stored in `localStorage`. On login, the token is decoded to extract the user role and redirect accordingly.
+
+Route guards protect each page based on role:
+
+```
+/dashboard  → ADMIN, SELLER, CLIENT
+/users      → ADMIN only
+/products   → ADMIN, SELLER
+/inventory  → ADMIN, SELLER
+/payments   → ADMIN only
+```
+
+---
+
+## Environment Variables
+
+```typescript
+// src/environments/environment.ts
+export const environment = {
+    production: false,
+    apiUrl: ''
+};
+```
+
+In production (Docker), the nginx proxy handles routing to backend services.
+
+---
+
+## nginx Configuration (Docker)
+
+```nginx
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /auth {
+        proxy_pass http://auth-service:8081;
+    }
+
+    location /users {
+        proxy_pass http://user-service:8082;
+    }
+
+    location /products {
+        proxy_pass http://product-service:8083;
+    }
+
+    location /inventory {
+        proxy_pass http://inventory-service:8084;
+    }
+
+    location /orders {
+        proxy_pass http://order-service:8085;
+    }
+
+    location /payments {
+        proxy_pass http://payment-service:8086;
+    }
+}
+```
+
+---
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `ng serve --proxy-config proxy.conf.json` | Start development server |
+| `npm run build` | Build for production |
+| `ng test` | Run unit tests |
+
+---
+
+## Related Repositories
+
+- [Auth Service](https://github.com/sahesito/smartcommerce-auth)
+- [User Service](https://github.com/sahesito/smartcommerce-users)
+- [Product Service](https://github.com/sahesito/smartcommerce-products)
+- [Inventory Service](https://github.com/sahesito/smartcommerce-inventory)
+- [Order Service](https://github.com/sahesito/smartcommerce-orders)
+- [Payment Service](https://github.com/sahesito/smartcommerce-payments)
+
+---
