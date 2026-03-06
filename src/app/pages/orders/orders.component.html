@@ -3,41 +3,38 @@
 
 <div class="orders-page">
 
-    <!-- Header -->
     <div class="page-header">
         <div>
-            <h1>Pedidos</h1>
-            <p>{{ isAdmin() ? 'Gestiona todos los pedidos' : 'Mis pedidos' }}</p>
+            <h1>Orders</h1>
+            <p>{{ isAdmin() ? 'Manage all orders' : 'My orders' }}</p>
         </div>
     </div>
 
-    <!-- Búsqueda -->
     <div class="search-bar">
-        <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar por ID, usuario o estado..."
+        <input pInputText [(ngModel)]="searchTerm" placeholder="Search by ID, user, or status..."
             class="search-input" />
     </div>
 
-    <!-- Tabla -->
     <div class="table-container">
         <p-table [value]="filteredOrders" [loading]="loading" [paginator]="true" [rows]="10"
             [rowsPerPageOptions]="[5, 10, 20]" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '60rem'}">
             <ng-template pTemplate="header">
                 <tr>
                     <th>#</th>
-                    <th>Usuario</th>
+                    <th>User</th>
                     <th>Total</th>
-                    <th>Ciudad</th>
-                    <th>Pago</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
+                    <th>City</th>
+                    <th>Pay</th>
+                    <th>State</th>
+                    <th>Date</th>
+                    <th>Actions</th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-order>
                 <tr>
                     <td><strong>#{{ order.id }}</strong></td>
-                    <td>Usuario #{{ order.userId }}</td>
+                    <td>User #{{ order.userId }}</td>
                     <td><strong>S/ {{ order.totalAmount | number:'1.2-2' }}</strong></td>
                     <td>{{ order.shippingCity }}</td>
                     <td>
@@ -53,15 +50,15 @@
                                 (onClick)="openDetail(order)" />
                             @if (canUpdateStatus()) {
                             <p-button icon="pi pi-refresh" [text]="true" severity="info" size="small"
-                                pTooltip="Cambiar estado" (onClick)="openStatusDialog(order)" />
+                                pTooltip="Change status" (onClick)="openStatusDialog(order)" />
                             }
                             @if (canCancel(order)) {
-                            <p-button icon="pi pi-times" [text]="true" severity="warn" size="small" pTooltip="Cancelar"
+                            <p-button icon="pi pi-times" [text]="true" severity="warn" size="small" pTooltip="Cancel"
                                 (onClick)="confirmCancel(order)" />
                             }
                             @if (isAdmin()) {
                             <p-button icon="pi pi-trash" [text]="true" severity="danger" size="small"
-                                pTooltip="Eliminar" (onClick)="confirmDelete(order)" />
+                                pTooltip="Delete" (onClick)="confirmDelete(order)" />
                             }
                         </div>
                     </td>
@@ -71,7 +68,7 @@
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="8" class="empty-message">
-                        No se encontraron pedidos
+                        No orders found
                     </td>
                 </tr>
             </ng-template>
@@ -80,42 +77,41 @@
 
 </div>
 
-<!-- Dialog Detalle -->
-<p-dialog header="Detalle del Pedido" [(visible)]="detailVisible" [style]="{width: '580px'}" [modal]="true">
+<p-dialog header="Order Details" [(visible)]="detailVisible" [style]="{width: '580px'}" [modal]="true">
     @if (selectedOrder) {
     <div class="order-detail">
 
         <div class="detail-grid">
             <div class="detail-item">
-                <span class="detail-label">Pedido</span>
+                <span class="detail-label">Order</span>
                 <span class="detail-value">#{{ selectedOrder.id }}</span>
             </div>
             <div class="detail-item">
-                <span class="detail-label">Estado</span>
+                <span class="detail-label">State</span>
                 <p-tag [value]="getStatusLabel(selectedOrder.status)"
                     [severity]="getStatusSeverity(selectedOrder.status)" />
             </div>
             <div class="detail-item">
-                <span class="detail-label">Usuario</span>
+                <span class="detail-label">User</span>
                 <span class="detail-value">#{{ selectedOrder.userId }}</span>
             </div>
             <div class="detail-item">
-                <span class="detail-label">Método de pago</span>
+                <span class="detail-label">Payment method</span>
                 <span class="detail-value">{{ selectedOrder.paymentMethod }}</span>
             </div>
             <div class="detail-item">
-                <span class="detail-label">Dirección</span>
+                <span class="detail-label">Address</span>
                 <span class="detail-value">{{ selectedOrder.shippingAddress }}</span>
             </div>
             <div class="detail-item">
-                <span class="detail-label">Ciudad / País</span>
+                <span class="detail-label">City / Country</span>
                 <span class="detail-value">
                     {{ selectedOrder.shippingCity }}, {{ selectedOrder.shippingCountry }}
                 </span>
             </div>
             @if (selectedOrder.notes) {
             <div class="detail-item full">
-                <span class="detail-label">Notas</span>
+                <span class="detail-label">Note</span>
                 <span class="detail-value">{{ selectedOrder.notes }}</span>
             </div>
             }
@@ -123,7 +119,7 @@
 
         <p-divider />
 
-        <h3>Productos</h3>
+        <h3>Products</h3>
         <div class="order-items">
             @for (item of selectedOrder.items; track item.id) {
             <div class="order-item">
@@ -132,8 +128,8 @@
                     <span class="item-qty">x{{ item.quantity }}</span>
                 </div>
                 <div class="order-item-price">
-                    <span class="unit-price">S/ {{ item.unitPrice | number:'1.2-2' }} c/u</span>
-                    <strong>S/ {{ item.subtotal | number:'1.2-2' }}</strong>
+                    <span class="unit-price">S/ {{ item.unitPrice | number:'1.2-2' }} each</span>
+                    <strong>$ {{ item.subtotal | number:'1.2-2' }}</strong>
                 </div>
             </div>
             }
@@ -143,34 +139,33 @@
 
         <div class="order-total">
             <span>Total</span>
-            <strong>S/ {{ selectedOrder.totalAmount | number:'1.2-2' }}</strong>
+            <strong>$ {{ selectedOrder.totalAmount | number:'1.2-2' }}</strong>
         </div>
 
     </div>
     }
 </p-dialog>
 
-<!-- Dialog Cambiar Estado -->
-<p-dialog header="Cambiar Estado del Pedido" [(visible)]="statusDialogVisible"
+<p-dialog header="Change Order Status" [(visible)]="statusDialogVisible"
     [style]="{width: '420px', minHeight: '280px'}" [modal]="true" [resizable]="false">
     @if (selectedOrder) {
     <div class="status-form">
         <div class="current-status">
-            <span>Estado actual:</span>
+            <span>Current status:</span>
             <p-tag [value]="getStatusLabel(selectedOrder.status)"
                 [severity]="getStatusSeverity(selectedOrder.status)" />
         </div>
 
         <div class="field">
-            <label>Nuevo estado</label>
+            <label>New status</label>
             <p-select [(ngModel)]="statusRequest.status" [options]="statusOptions" optionLabel="label"
-                optionValue="value" styleClass="w-full" appendTo="body" placeholder="Selecciona un estado" />
+                optionValue="value" styleClass="w-full" appendTo="body" placeholder="Select a state" />
         </div>
     </div>
     }
 
     <ng-template pTemplate="footer">
-        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="statusDialogVisible = false" />
-        <p-button label="Actualizar" icon="pi pi-check" [loading]="saving" (onClick)="updateStatus()" />
+        <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="statusDialogVisible = false" />
+        <p-button label="Update" icon="pi pi-check" [loading]="saving" (onClick)="updateStatus()" />
     </ng-template>
 </p-dialog>

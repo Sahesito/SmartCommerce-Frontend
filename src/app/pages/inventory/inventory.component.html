@@ -5,14 +5,14 @@
 
     <div class="page-header">
         <div>
-            <h1>Inventario</h1>
-            <p>Gestiona el stock de productos</p>
+            <h1>Invetory</h1>
+            <p>Manage product stock</p>
         </div>
-        <p-button label="Nuevo Registro" icon="pi pi-plus" (onClick)="openCreate()" />
+        <p-button label="New" icon="pi pi-plus" (onClick)="openCreate()" />
     </div>
 
     <div class="search-bar">
-        <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar por producto o ubicación..."
+        <input pInputText [(ngModel)]="searchTerm" placeholder="Search by product or location..."
             class="search-input" />
     </div>
 
@@ -22,14 +22,14 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>ID</th>
-                    <th>Producto ID</th>
-                    <th>Cantidad</th>
-                    <th>Reservado</th>
-                    <th>Disponible</th>
+                    <th>Product ID</th>
+                    <th>Amount</th>
+                    <th>Reserved</th>
+                    <th>Available</th>
                     <th>Stock Mín.</th>
-                    <th>Ubicación</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th>Location</th>
+                    <th>State</th>
+                    <th>Actions</th>
                 </tr>
             </ng-template>
 
@@ -59,14 +59,14 @@
                     <td>
                         <div class="action-buttons">
                             <p-button icon="pi pi-plus-circle" [text]="true" severity="success" size="small"
-                                pTooltip="Agregar stock" (onClick)="openStockDialog(item, 'add')" />
+                                pTooltip="Add stock" (onClick)="openStockDialog(item, 'add')" />
                             <p-button icon="pi pi-minus-circle" [text]="true" severity="warn" size="small"
-                                pTooltip="Reducir stock" (onClick)="openStockDialog(item, 'reduce')" />
-                            <p-button icon="pi pi-pencil" [text]="true" size="small" pTooltip="Editar"
+                                pTooltip="Reduce stock" (onClick)="openStockDialog(item, 'reduce')" />
+                            <p-button icon="pi pi-pencil" [text]="true" size="small" pTooltip="Edit"
                                 (onClick)="openEdit(item)" />
                             @if (isAdmin()) {
                             <p-button icon="pi pi-trash" [text]="true" severity="danger" size="small"
-                                pTooltip="Eliminar" (onClick)="confirmDelete(item)" />
+                                pTooltip="Delete" (onClick)="confirmDelete(item)" />
                             }
                         </div>
                     </td>
@@ -76,7 +76,7 @@
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="9" class="empty-message">
-                        No se encontraron registros de inventario
+                        No inventory records were found
                     </td>
                 </tr>
             </ng-template>
@@ -90,73 +90,73 @@
     <div class="inventory-form">
 
         <div class="field">
-            <label>ID del Producto *</label>
-            <p-inputnumber [(ngModel)]="inventoryForm.productId" placeholder="ID del producto" [disabled]="isEditing"
+            <label>Product ID *</label>
+            <p-inputnumber [(ngModel)]="inventoryForm.productId" placeholder="Product ID" [disabled]="isEditing"
                 styleClass="w-full" />
         </div>
 
         <div class="field-row">
             <div class="field">
-                <label>Cantidad *</label>
+                <label>Amount *</label>
                 <p-inputnumber [(ngModel)]="inventoryForm.quantity" [min]="0" styleClass="w-full" />
             </div>
             <div class="field">
-                <label>Reservado</label>
+                <label>Reserved</label>
                 <p-inputnumber [(ngModel)]="inventoryForm.reservedQuantity" [min]="0" styleClass="w-full" />
             </div>
         </div>
 
         <div class="field-row">
             <div class="field">
-                <label>Stock Mínimo</label>
+                <label>Minimum Stock</label>
                 <p-inputnumber [(ngModel)]="inventoryForm.minStockLevel" [min]="0" styleClass="w-full" />
             </div>
             <div class="field">
-                <label>Stock Máximo</label>
+                <label>Maximum Stock</label>
                 <p-inputnumber [(ngModel)]="inventoryForm.maxStockLevel" [min]="1" styleClass="w-full" />
             </div>
         </div>
 
         <div class="field">
-            <label>Ubicación</label>
+            <label>Location</label>
             <input pInputText [(ngModel)]="inventoryForm.location" placeholder="Warehouse-A" class="w-full" />
         </div>
 
     </div>
 
     <ng-template pTemplate="footer">
-        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="dialogVisible = false" />
-        <p-button [label]="isEditing ? 'Actualizar' : 'Crear'" icon="pi pi-check" [loading]="saving"
+        <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="dialogVisible = false" />
+        <p-button [label]="isEditing ? 'Update' : 'Create'" icon="pi pi-check" [loading]="saving"
             (onClick)="saveInventory()" />
     </ng-template>
 </p-dialog>
 
-<p-dialog [header]="stockAction === 'add' ? 'Agregar Stock' : 'Reducir Stock'" [(visible)]="stockDialogVisible"
+<p-dialog [header]="stockAction === 'add' ? 'Add Stock' : 'Reduce Stock'" [(visible)]="stockDialogVisible"
     [style]="{width: '380px'}" [modal]="true">
     <div class="stock-form">
 
         @if (selectedInventory) {
         <div class="stock-info">
-            <span>Producto #{{ selectedInventory.productId }}</span>
-            <span>Disponible actual: <strong>{{ selectedInventory.availableQuantity }}</strong></span>
+            <span>Product #{{ selectedInventory.productId }}</span>
+            <span>Current available: <strong>{{ selectedInventory.availableQuantity }}</strong></span>
         </div>
         }
 
         <div class="field">
-            <label>Cantidad *</label>
+            <label>Amount *</label>
             <p-inputnumber [(ngModel)]="stockRequest.quantity" [min]="1" styleClass="w-full" />
         </div>
 
         <div class="field">
-            <label>Motivo</label>
-            <input pInputText [(ngModel)]="stockRequest.reason" placeholder="Motivo del ajuste..." class="w-full" />
+            <label>Reason</label>
+            <input pInputText [(ngModel)]="stockRequest.reason" placeholder="Reason for adjustment..." class="w-full" />
         </div>
 
     </div>
 
     <ng-template pTemplate="footer">
-        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="stockDialogVisible = false" />
-        <p-button [label]="stockAction === 'add' ? 'Agregar' : 'Reducir'"
+        <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="stockDialogVisible = false" />
+        <p-button [label]="stockAction === 'add' ? 'Add' : 'Reduce'"
             [icon]="stockAction === 'add' ? 'pi pi-plus' : 'pi pi-minus'"
             [severity]="stockAction === 'add' ? 'success' : 'warn'" [loading]="saving" (onClick)="updateStock()" />
     </ng-template>

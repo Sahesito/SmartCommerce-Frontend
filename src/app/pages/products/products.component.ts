@@ -61,8 +61,8 @@ export class ProductsComponent implements OnInit {
     ];
 
     statusOptions = [
-        { label: 'Activo', value: true },
-        { label: 'Inactivo', value: false }
+        { label: 'Active', value: true },
+        { label: 'Idle', value: false }
     ];
 
     constructor(
@@ -99,7 +99,7 @@ export class ProductsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se pudieron cargar los productos'
+                    detail: 'The products could not be loaded.'
                 });
             }
         });
@@ -129,8 +129,8 @@ export class ProductsComponent implements OnInit {
         if (!this.productForm.name || !this.productForm.category || !this.productForm.price) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Campos requeridos',
-                detail: 'Nombre, categoría y precio son obligatorios'
+                summary: 'Required fields',
+                detail: 'Name, category, and price are required'
             });
             return;
         }
@@ -144,8 +144,8 @@ export class ProductsComponent implements OnInit {
                     this.dialogVisible = false;
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Actualizado',
-                        detail: 'Producto actualizado correctamente'
+                        summary: 'Updated',
+                        detail: 'Successfully updated product'
                     });
                     this.loadProducts();
                 },
@@ -154,7 +154,7 @@ export class ProductsComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: err.error?.error || 'Error al actualizar'
+                        detail: err.error?.error || 'Error updating'
                     });
                 }
             });
@@ -165,8 +165,8 @@ export class ProductsComponent implements OnInit {
                     this.dialogVisible = false;
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Creado',
-                        detail: 'Producto creado correctamente'
+                        summary: 'Created',
+                        detail: 'Successfully created product'
                     });
                     this.loadProducts();
                 },
@@ -175,7 +175,7 @@ export class ProductsComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: err.error?.error || 'Error al crear'
+                        detail: err.error?.error || 'Error creating'
                     });
                 }
             });
@@ -184,16 +184,16 @@ export class ProductsComponent implements OnInit {
 
     confirmDelete(product: Product): void {
         this.confirmationService.confirm({
-            message: `¿Estás seguro de desactivar "${product.name}"?`,
-            header: 'Confirmar',
+            message: `¿Are you sure you want to deactivate it "${product.name}"?`,
+            header: 'Confirm',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.productService.delete(product.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: 'Desactivado',
-                            detail: 'Producto desactivado correctamente'
+                            summary: 'Disabled',
+                            detail: 'Product deactivated successfully'
                         });
                         this.loadProducts();
                     },
@@ -201,7 +201,7 @@ export class ProductsComponent implements OnInit {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'No se pudo desactivar el producto'
+                            detail: 'The product could not be deactivated'
                         });
                     }
                 });
@@ -214,8 +214,8 @@ export class ProductsComponent implements OnInit {
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Reactivado',
-                    detail: 'Producto reactivado correctamente'
+                    summary: 'Reactivated',
+                    detail: 'Product reactivated successfully'
                 });
                 this.loadProducts();
             },
@@ -223,7 +223,7 @@ export class ProductsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se pudo reactivar el producto'
+                    detail: 'The product could not be reactivated'
                 });
             }
         });

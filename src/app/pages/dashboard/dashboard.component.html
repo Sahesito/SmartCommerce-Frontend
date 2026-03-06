@@ -1,14 +1,12 @@
 <div class="dashboard">
 
-    <!-- Header -->
     <div class="dashboard-header">
         <div>
-            <h1>Bienvenido, {{ currentUser?.firstName }}</h1>
-            <p>{{ getRoleLabel() }} — Panel de control</p>
+            <h1>Welcome, {{ currentUser?.firstName }}</h1>
+            <p>{{ getRoleLabel() }} — Control Panel</p>
         </div>
     </div>
 
-    <!-- Stats Cards -->
     @if (loading) {
     <div class="stats-grid">
         @for (i of [1,2,3,4]; track i) {
@@ -24,7 +22,7 @@
             </div>
             <div class="stat-info">
                 <span class="stat-value">{{ stats.totalProducts }}</span>
-                <span class="stat-label">Productos</span>
+                <span class="stat-label">Products</span>
             </div>
         </div>
 
@@ -35,7 +33,7 @@
             </div>
             <div class="stat-info">
                 <span class="stat-value">{{ stats.totalUsers }}</span>
-                <span class="stat-label">Usuarios</span>
+                <span class="stat-label">Users</span>
             </div>
         </div>
         }
@@ -46,7 +44,7 @@
             </div>
             <div class="stat-info">
                 <span class="stat-value">{{ stats.lowStockItems }}</span>
-                <span class="stat-label">Stock bajo</span>
+                <span class="stat-label">Low Stock</span>
             </div>
         </div>
 
@@ -56,22 +54,21 @@
             </div>
             <div class="stat-info">
                 <span class="stat-value">{{ stats.pendingOrders }}</span>
-                <span class="stat-label">Pedidos pendientes</span>
+                <span class="stat-label">Pending orders</span>
             </div>
         </div>
 
     </div>
     }
 
-    <!-- Accesos rápidos -->
     <div class="quick-access">
-        <h2>Accesos rápidos</h2>
+        <h2>Quick access</h2>
         <div class="quick-grid">
 
             @if (isAdminOrSeller()) {
             <div class="quick-card" routerLink="/products">
                 <i class="pi pi-box"></i>
-                <span>Gestionar Productos</span>
+                <span>Manage Products</span>
                 <i class="pi pi-arrow-right arrow"></i>
             </div>
             }
@@ -79,21 +76,21 @@
             @if (isAdminOrSeller()) {
             <div class="quick-card" routerLink="/inventory">
                 <i class="pi pi-warehouse"></i>
-                <span>Ver Inventario</span>
+                <span>View Inventory</span>
                 <i class="pi pi-arrow-right arrow"></i>
             </div>
             }
 
             <div class="quick-card" routerLink="/orders">
                 <i class="pi pi-shopping-cart"></i>
-                <span>Ver Pedidos</span>
+                <span>View Orders</span>
                 <i class="pi pi-arrow-right arrow"></i>
             </div>
 
             @if (isAdmin()) {
             <div class="quick-card" routerLink="/users">
                 <i class="pi pi-users"></i>
-                <span>Gestionar Usuarios</span>
+                <span>Manage Users</span>
                 <i class="pi pi-arrow-right arrow"></i>
             </div>
             }

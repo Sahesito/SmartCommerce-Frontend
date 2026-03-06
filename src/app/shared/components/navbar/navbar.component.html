@@ -1,7 +1,7 @@
 <nav class="navbar">
     <div class="navbar-brand" routerLink="/dashboard">
         <span class="brand-logo">SC</span>
-        <span class="brand-name">SmartCommerce</span>
+        <span class="brand-name">Smart Commerce</span>
     </div>
 
     <div class="navbar-right">
@@ -14,7 +14,7 @@
                 {{ currentUser.firstName }} {{ currentUser.lastName }}
             </span>
             <p-avatar [label]="getInitials()" shape="circle" styleClass="avatar" />
-            <p-button icon="pi pi-sign-out" severity="secondary" [text]="true" pTooltip="Cerrar sesión"
+            <p-button icon="pi pi-sign-out" severity="secondary" [text]="true" pTooltip="Logout"
                 (onClick)="logout()" />
         </div>
         }

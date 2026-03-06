@@ -3,33 +3,30 @@
 
 <div class="products-page">
 
-    <!-- Header -->
     <div class="page-header">
         <div>
-            <h1>Productos</h1>
-            <p>Gestiona el catálogo de productos</p>
+            <h1>Products</h1>
+            <p>Manage the product catalog</p>
         </div>
-        <p-button label="Nuevo Producto" icon="pi pi-plus" (onClick)="openCreate()" />
+        <p-button label="New Product" icon="pi pi-plus" (onClick)="openCreate()" />
     </div>
 
-    <!-- Búsqueda -->
     <div class="search-bar">
-        <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar por nombre o categoría..."
+        <input pInputText [(ngModel)]="searchTerm" placeholder="Search by name or category..."
             class="search-input" />
     </div>
 
-    <!-- Tabla -->
     <div class="table-container">
         <p-table [value]="filteredProducts" [loading]="loading" [paginator]="true" [rows]="10"
             [rowsPerPageOptions]="[5, 10, 20]" styleClass="p-datatable-sm" [tableStyle]="{'min-width': '60rem'}">
             <ng-template pTemplate="header">
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Precio</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>State</th>
+                    <th>Actions</th>
                 </tr>
             </ng-template>
 
@@ -49,7 +46,7 @@
                     </td>
                     <td>S/ {{ product.price | number:'1.2-2' }}</td>
                     <td>
-                        <p-tag [value]="product.active ? 'Activo' : 'Inactivo'"
+                        <p-tag [value]="product.active ? 'Active' : 'Deactivate'"
                             [severity]="product.active ? 'success' : 'danger'" />
                     </td>
                     <td>
@@ -58,10 +55,10 @@
                                 (onClick)="openEdit(product)" />
                             @if (product.active) {
                             <p-button icon="pi pi-ban" [text]="true" severity="danger" size="small"
-                                pTooltip="Desactivar" (onClick)="confirmDelete(product)" />
+                                pTooltip="Deactivate" (onClick)="confirmDelete(product)" />
                             } @else {
                             <p-button icon="pi pi-check" [text]="true" severity="success" size="small"
-                                pTooltip="Reactivar" (onClick)="reactivate(product)" />
+                                pTooltip="Reactivate" (onClick)="reactivate(product)" />
                             }
                         </div>
                     </td>
@@ -71,7 +68,7 @@
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="6" class="empty-message">
-                        No se encontraron productos
+                        No products found
                     </td>
                 </tr>
             </ng-template>
@@ -80,42 +77,41 @@
 
 </div>
 
-<!-- Dialog Crear/Editar -->
-<p-dialog [header]="isEditing ? 'Editar Producto' : 'Nuevo Producto'" [(visible)]="dialogVisible"
+<p-dialog [header]="isEditing ? 'Edit Product' : 'New Product'" [(visible)]="dialogVisible"
     [style]="{width: '540px'}" [modal]="true">
     <div class="product-form">
 
         <div class="field">
-            <label>Nombre *</label>
-            <input pInputText [(ngModel)]="productForm.name" placeholder="Nombre del producto" class="w-full" />
+            <label>Name *</label>
+            <input pInputText [(ngModel)]="productForm.name" placeholder="Product name" class="w-full" />
         </div>
 
         <div class="field">
-            <label>Descripción</label>
-            <textarea pTextarea [(ngModel)]="productForm.description" placeholder="Descripción del producto" rows="3"
+            <label>Description</label>
+            <textarea pTextarea [(ngModel)]="productForm.description" placeholder="Product Description" rows="3"
                 class="w-full"></textarea>
         </div>
 
         <div class="field-row">
             <div class="field">
-                <label>Precio *</label>
+                <label>Price *</label>
                 <p-inputnumber [(ngModel)]="productForm.price" mode="decimal" [minFractionDigits]="2"
-                    [maxFractionDigits]="2" prefix="S/ " styleClass="w-full" />
+                    [maxFractionDigits]="2" prefix="$ " styleClass="w-full" />
             </div>
             <div class="field">
-                <label>Categoría *</label>
+                <label>Category *</label>
                 <p-select [(ngModel)]="productForm.category" [options]="categories" optionLabel="label"
-                    optionValue="value" placeholder="Seleccionar" styleClass="w-full" />
+                    optionValue="value" placeholder="Select" styleClass="w-full" />
             </div>
         </div>
 
         <div class="field">
-            <label>URL de imagen</label>
+            <label>Image URL</label>
             <input pInputText [(ngModel)]="productForm.imageUrl" placeholder="https://..." class="w-full" />
         </div>
 
         <div class="field">
-            <label>Estado</label>
+            <label>State</label>
             <p-select [(ngModel)]="productForm.active" [options]="statusOptions" optionLabel="label" optionValue="value"
                 styleClass="w-full" />
         </div>
@@ -123,8 +119,8 @@
     </div>
 
     <ng-template pTemplate="footer">
-        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="dialogVisible = false" />
-        <p-button [label]="isEditing ? 'Actualizar' : 'Crear'" icon="pi pi-check" [loading]="saving"
+        <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="dialogVisible = false" />
+        <p-button [label]="isEditing ? 'Update' : 'Create'" icon="pi pi-check" [loading]="saving"
             (onClick)="saveProduct()" />
     </ng-template>
 </p-dialog>

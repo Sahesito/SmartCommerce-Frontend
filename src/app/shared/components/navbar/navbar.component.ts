@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit {
             },
             { separator: true },
             {
-                label: 'Cerrar Sesión',
+                label: 'Logout',
                 icon: 'pi pi-sign-out',
                 command: () => this.logout()
             }
@@ -62,9 +62,9 @@ export class NavbarComponent implements OnInit {
 
     getRoleLabel(): string {
         switch (this.currentUser?.role) {
-            case 'ADMIN': return 'Administrador';
-            case 'SELLER': return 'Vendedor';
-            case 'CLIENT': return 'Cliente';
+            case 'ADMIN': return 'Admin';
+            case 'SELLER': return 'Seller';
+            case 'CLIENT': return 'Client';
             default: return '';
         }
     }

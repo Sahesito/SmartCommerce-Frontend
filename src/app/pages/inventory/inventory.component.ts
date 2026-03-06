@@ -90,7 +90,7 @@ export class InventoryComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se pudo cargar el inventario'
+                    detail: 'The inventory could not be loaded.'
                 });
             }
         });
@@ -127,8 +127,8 @@ export class InventoryComponent implements OnInit {
         if (!this.inventoryForm.productId || this.inventoryForm.quantity < 0) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Campos requeridos',
-                detail: 'ID de producto y cantidad son obligatorios'
+                summary: 'Required fields',
+                detail: 'Product ID and quantity are required'
             });
             return;
         }
@@ -142,8 +142,8 @@ export class InventoryComponent implements OnInit {
                     this.dialogVisible = false;
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Actualizado',
-                        detail: 'Inventario actualizado correctamente'
+                        summary: 'Updated',
+                        detail: 'Inventory updated correctly'
                     });
                     this.loadInventory();
                 },
@@ -152,7 +152,7 @@ export class InventoryComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: err.error?.error || 'Error al actualizar'
+                        detail: err.error?.error || 'Error updating'
                     });
                 }
             });
@@ -163,8 +163,8 @@ export class InventoryComponent implements OnInit {
                     this.dialogVisible = false;
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Creado',
-                        detail: 'Inventario creado correctamente'
+                        summary: 'Created',
+                        detail: 'Inventory created successfully'
                     });
                     this.loadInventory();
                 },
@@ -173,7 +173,7 @@ export class InventoryComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: err.error?.error || 'Error al crear'
+                        detail: err.error?.error || 'Error creating'
                     });
                 }
             });
@@ -184,8 +184,8 @@ export class InventoryComponent implements OnInit {
         if (!this.selectedInventory || this.stockRequest.quantity <= 0) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Cantidad inválida',
-                detail: 'La cantidad debe ser mayor a 0'
+                summary: 'Invalid amount',
+                detail: 'The amount must be greater than 0'
             });
             return;
         }
@@ -201,8 +201,8 @@ export class InventoryComponent implements OnInit {
                 this.stockDialogVisible = false;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Stock actualizado',
-                    detail: `Stock ${this.stockAction === 'add' ? 'agregado' : 'reducido'} correctamente`
+                    summary: 'Updated stock',
+                    detail: `Stock ${this.stockAction === 'add' ? 'add' : 'reduce'} correctly`
                 });
                 this.loadInventory();
             },
@@ -211,7 +211,7 @@ export class InventoryComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: err.error?.error || 'Error al actualizar stock'
+                    detail: err.error?.error || 'Error updating stock'
                 });
             }
         });
@@ -219,16 +219,16 @@ export class InventoryComponent implements OnInit {
 
     confirmDelete(item: Inventory): void {
         this.confirmationService.confirm({
-            message: `¿Eliminar inventario del producto #${item.productId}?`,
-            header: 'Confirmar',
+            message: `Remove product inventory #${item.productId}?`,
+            header: 'Confirm',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.inventoryService.delete(item.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: 'Eliminado',
-                            detail: 'Inventario eliminado correctamente'
+                            summary: 'Deleted',
+                            detail: 'Inventory successfully deleted'
                         });
                         this.loadInventory();
                     },
@@ -236,7 +236,7 @@ export class InventoryComponent implements OnInit {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'No se pudo eliminar el inventario'
+                            detail: 'The inventory could not be deleted'
                         });
                     }
                 });
@@ -251,8 +251,8 @@ export class InventoryComponent implements OnInit {
     }
 
     getStockLabel(item: Inventory): string {
-        if (item.availableQuantity <= 0) return 'Sin stock';
-        if (item.lowStock) return 'Stock bajo';
+        if (item.availableQuantity <= 0) return 'Out of stock';
+        if (item.lowStock) return 'Low stock';
         return 'Normal';
     }
 

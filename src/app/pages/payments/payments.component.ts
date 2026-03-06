@@ -58,17 +58,17 @@ export class PaymentsComponent implements OnInit {
     };
 
     paymentMethods = [
-        { label: 'Tarjeta de Crédito', value: 'CREDIT_CARD' },
-        { label: 'Tarjeta de Débito', value: 'DEBIT_CARD' },
-        { label: 'Transferencia', value: 'TRANSFER' },
-        { label: 'Efectivo', value: 'CASH' }
+        { label: 'Credit Card', value: 'CREDIT_CARD' },
+        { label: 'Debit Card', value: 'DEBIT_CARD' },
+        { label: 'Transfer', value: 'TRANSFER' },
+        { label: 'Cash', value: 'CASH' }
     ];
 
     statusOptions = [
-        { label: 'Pendiente', value: 'PENDING' },
-        { label: 'Completado', value: 'COMPLETED' },
-        { label: 'Fallido', value: 'FAILED' },
-        { label: 'Reembolsado', value: 'REFUNDED' }
+        { label: 'Pending', value: 'PENDING' },
+        { label: 'Completed', value: 'COMPLETED' },
+        { label: 'Failed', value: 'FAILED' },
+        { label: 'Refunded', value: 'REFUNDED' }
     ];
 
     constructor(
@@ -95,7 +95,6 @@ export class PaymentsComponent implements OnInit {
     loadPayments(): void {
         this.loading = true;
 
-        // CLIENT solo ve sus pagos
         if (this.authService.isClient()) {
             const userId = this.authService.currentUser!.id;
             this.paymentService.getByUserId(userId).subscribe({
@@ -105,11 +104,10 @@ export class PaymentsComponent implements OnInit {
                 },
                 error: () => {
                     this.loading = false;
-                    this.showError('No se pudieron cargar los pagos');
+                    this.showError('Payments could not be processed');
                 }
             });
         } else {
-            // ADMIN ve todos
             this.paymentService.getAll().subscribe({
                 next: (payments) => {
                     this.payments = payments;
@@ -117,7 +115,7 @@ export class PaymentsComponent implements OnInit {
                 },
                 error: () => {
                     this.loading = false;
-                    this.showError('No se pudieron cargar los pagos');
+                    this.showError('Payments could not be processed');
                 }
             });
         }
@@ -145,8 +143,8 @@ export class PaymentsComponent implements OnInit {
             !this.paymentForm.paymentMethod) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Campos requeridos',
-                detail: 'ID de pedido, monto y método de pago son obligatorios'
+                summary: 'Required fields',
+                detail: 'Order ID, amount, and payment method are required.'
             });
             return;
         }
@@ -158,8 +156,8 @@ export class PaymentsComponent implements OnInit {
                 this.createDialogVisible = false;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Pago registrado',
-                    detail: `Transacción ${payment.transactionId} procesada`
+                    summary: 'Registered payment',
+                    detail: `Transaction ${payment.transactionId} processed`
                 });
                 this.loadPayments();
             },
@@ -168,7 +166,7 @@ export class PaymentsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: err.error?.error || 'Error al procesar el pago'
+                    detail: err.error?.error || 'Payment processing error'
                 });
             }
         });
@@ -184,8 +182,8 @@ export class PaymentsComponent implements OnInit {
                 this.statusDialogVisible = false;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Actualizado',
-                    detail: 'Estado del pago actualizado'
+                    summary: 'Updated',
+                    detail: 'Updated payment status'
                 });
                 this.loadPayments();
             },
@@ -194,7 +192,7 @@ export class PaymentsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: err.error?.error || 'Error al actualizar estado'
+                    detail: err.error?.error || 'Error updating status'
                 });
             }
         });
@@ -202,21 +200,21 @@ export class PaymentsComponent implements OnInit {
 
     confirmDelete(payment: Payment): void {
         this.confirmationService.confirm({
-            message: `¿Eliminar el pago #${payment.id}?`,
-            header: 'Confirmar eliminación',
+            message: `¿Delete payment #${payment.id}?`,
+            header: 'Confirm delete',
             icon: 'pi pi-trash',
             accept: () => {
                 this.paymentService.delete(payment.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: 'Eliminado',
-                            detail: 'Pago eliminado correctamente'
+                            summary: 'Delete',
+                            detail: 'Payment deleted successfully'
                         });
                         this.loadPayments();
                     },
                     error: () => {
-                        this.showError('No se pudo eliminar el pago');
+                        this.showError('The payment could not be cancelled');
                     }
                 });
             }
@@ -235,10 +233,10 @@ export class PaymentsComponent implements OnInit {
 
     getStatusLabel(status: string): string {
         switch (status) {
-            case 'PENDING': return 'Pendiente';
-            case 'COMPLETED': return 'Completado';
-            case 'FAILED': return 'Fallido';
-            case 'REFUNDED': return 'Reembolsado';
+            case 'PENDING': return 'Pending';
+            case 'COMPLETED': return 'Completed';
+            case 'FAILED': return 'Failed';
+            case 'REFUNDED': return 'Refunded';
             default: return status;
         }
     }

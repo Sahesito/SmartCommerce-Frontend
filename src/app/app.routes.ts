@@ -9,7 +9,6 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
 
-    // Rutas públicas — sin layout
     {
         path: 'auth',
         children: [
@@ -26,7 +25,6 @@ export const routes: Routes = [
         ]
     },
 
-    // Rutas protegidas — con layout (navbar + sidebar)
     {
         path: '',
         loadComponent: () =>

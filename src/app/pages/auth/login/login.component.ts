@@ -49,8 +49,8 @@ export class LoginComponent {
         if (!this.loginData.email || !this.loginData.password) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Campos requeridos',
-                detail: 'Por favor completa todos los campos'
+                summary: 'Required fields',
+                detail: 'Please complete all fields'
             });
             return;
         }
@@ -62,11 +62,10 @@ export class LoginComponent {
                 this.loading = false;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Bienvenido',
-                    detail: `Hola ${response.firstName}!`
+                    summary: 'Welcome',
+                    detail: `Hello ${response.firstName}!`
                 });
 
-                // Redirigir según el rol
                 setTimeout(() => {
                     if (response.role === 'CLIENT') {
                         this.router.navigate(['/shop']);
@@ -80,7 +79,7 @@ export class LoginComponent {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: err.error?.error || 'Credenciales incorrectas'
+                    detail: err.error?.error || 'Incorrect credentials'
                 });
             }
         });

@@ -50,8 +50,8 @@ export class RegisterComponent {
     loading = false;
 
     roles = [
-        { label: 'Cliente', value: 'CLIENT' },
-        { label: 'Vendedor', value: 'SELLER' }
+        { label: 'Client', value: 'CLIENT' },
+        { label: 'Seller', value: 'SELLER' }
     ];
 
     constructor(
@@ -65,8 +65,8 @@ export class RegisterComponent {
             !this.registerData.email || !this.registerData.password) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Campos requeridos',
-                detail: 'Por favor completa todos los campos'
+                summary: 'Required fields',
+                detail: 'Please complete all fields'
             });
             return;
         }
@@ -74,8 +74,8 @@ export class RegisterComponent {
         if (this.registerData.password !== this.confirmPassword) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Contraseñas no coinciden',
-                detail: 'Verifica que las contraseñas sean iguales'
+                summary: 'Passwords do not match',
+                detail: 'Verify that the passwords are the same'
             });
             return;
         }
@@ -83,8 +83,8 @@ export class RegisterComponent {
         if (this.registerData.password.length < 6) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Contraseña muy corta',
-                detail: 'La contraseña debe tener al menos 6 caracteres'
+                summary: 'Very short password',
+                detail: 'The password must be at least 6 characters long'
             });
             return;
         }
@@ -96,8 +96,8 @@ export class RegisterComponent {
                 this.loading = false;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Cuenta creada',
-                    detail: `Bienvenido ${response.firstName}!`
+                    summary: 'Created account',
+                    detail: `Welcome ${response.firstName}!`
                 });
 
                 setTimeout(() => {
@@ -113,7 +113,7 @@ export class RegisterComponent {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: err.error?.error || 'Error al crear la cuenta'
+                    detail: err.error?.error || 'Error creating account'
                 });
             }
         });

@@ -60,7 +60,7 @@ export class ShopComponent implements OnInit {
     selectedCategory = '';
 
     categories = [
-        { label: 'Todas las categorías', value: '' },
+        { label: 'All categories', value: '' },
         { label: 'Electronics', value: 'Electronics' },
         { label: 'Clothing', value: 'Clothing' },
         { label: 'Home & Kitchen', value: 'Home & Kitchen' },
@@ -77,10 +77,10 @@ export class ShopComponent implements OnInit {
     };
 
     paymentMethods = [
-        { label: 'Tarjeta de Crédito', value: 'CREDIT_CARD' },
-        { label: 'Tarjeta de Débito', value: 'DEBIT_CARD' },
-        { label: 'Transferencia', value: 'TRANSFER' },
-        { label: 'Efectivo', value: 'CASH' }
+        { label: 'Credit card', value: 'CREDIT_CARD' },
+        { label: 'Debit card', value: 'DEBIT_CARD' },
+        { label: 'Transfer', value: 'TRANSFER' },
+        { label: 'Cash', value: 'CASH' }
     ];
 
 constructor(
@@ -114,7 +114,7 @@ constructor(
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se pudieron cargar los productos'
+                    detail: 'The products could not be loaded.'
                 });
             }
         });
@@ -142,8 +142,8 @@ constructor(
     this.cartService.addToCart(product);
     this.messageService.add({
         severity: 'success',
-        summary: 'Agregado',
-        detail: `${product.name} agregado al carrito`
+        summary: 'Add',
+        detail: `${product.name} added to cart`
     });
 }
 
@@ -172,8 +172,8 @@ constructor(
         if (this.cart.length === 0) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Carrito vacío',
-                detail: 'Agrega productos antes de continuar'
+                summary: 'Empty cart',
+                detail: 'Add products before continuing'
             });
             return;
         }
@@ -187,8 +187,8 @@ constructor(
         !this.checkoutData.paymentMethod) {
         this.messageService.add({
             severity: 'warn',
-            summary: 'Campos requeridos',
-            detail: 'Completa todos los campos de envío'
+            summary: 'Required fields',
+            detail: 'Complete all submission fields'
         });
         return;
     }
@@ -210,16 +210,14 @@ constructor(
         }))
     };
 
-    // Paso 1: Crear orden
     this.orderService.create(orderRequest).subscribe({
         next: (order) => {
-            // Paso 2: Registrar pago automáticamente
             this.paymentService.create({
                 orderId: order.id,
                 userId,
                 amount: total,
                 paymentMethod: this.checkoutData.paymentMethod,
-                description: `Pago pedido #${order.id}`
+                description: `Payment request #${order.id}`
             }).subscribe({
                 next: () => {
                     this.placingOrder = false;
@@ -228,8 +226,8 @@ constructor(
                     this.resetCheckout();
                     this.messageService.add({
                         severity: 'success',
-                        summary: '¡Pedido realizado!',
-                        detail: `Pedido #${order.id} confirmado y pago registrado`
+                        summary: '¡Order placed!',
+                        detail: `Order #${order.id} confirmed and registered payment`
                     });
                 },
                 error: () => {
@@ -239,8 +237,8 @@ constructor(
                     this.resetCheckout();
                     this.messageService.add({
                         severity: 'warn',
-                        summary: 'Pedido creado',
-                        detail: `Pedido #${order.id} creado. El pago no se pudo registrar automáticamente`
+                        summary: 'Order created',
+                        detail: `Pedido #${order.id} Created. Payment could not be automatically registered.`
                     });
                 }
             });
@@ -250,7 +248,7 @@ constructor(
             this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: err.error?.error || 'No se pudo realizar el pedido'
+                detail: err.error?.error || 'The order could not be processed'
             });
         }
     });

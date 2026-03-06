@@ -54,7 +54,6 @@ export class DashboardComponent implements OnInit {
     loadStats(): void {
         this.loading = true;
 
-        // Cargar productos
         this.productService.getAll().subscribe({
             next: (products) => {
                 this.stats.totalProducts = products.length;
@@ -62,7 +61,6 @@ export class DashboardComponent implements OnInit {
             error: () => { }
         });
 
-        // Cargar usuarios (solo ADMIN)
         if (this.authService.isAdmin()) {
             this.userService.getAll().subscribe({
                 next: (users) => {
@@ -72,7 +70,6 @@ export class DashboardComponent implements OnInit {
             });
         }
 
-        // Cargar bajo stock
         this.inventoryService.getLowStock().subscribe({
             next: (items) => {
                 this.stats.lowStockItems = items.length;
@@ -80,7 +77,6 @@ export class DashboardComponent implements OnInit {
             error: () => { }
         });
 
-        // Cargar pedidos pendientes
         this.orderService.getByStatus('PENDING').subscribe({
             next: (orders) => {
                 this.stats.pendingOrders = orders.length;
@@ -94,8 +90,8 @@ export class DashboardComponent implements OnInit {
 
     getRoleLabel(): string {
         switch (this.currentUser?.role) {
-            case 'ADMIN': return 'Administrador';
-            case 'SELLER': return 'Vendedor';
+            case 'ADMIN': return 'Admin';
+            case 'SELLER': return 'Seller';
             default: return '';
         }
     }

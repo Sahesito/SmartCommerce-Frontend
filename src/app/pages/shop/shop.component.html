@@ -2,30 +2,27 @@
 
 <div class="shop">
 
-    <!-- Header -->
     <div class="shop-header">
         <div>
-            <h1>Tienda</h1>
-            <p>Explora nuestros productos</p>
+            <h1>Store</h1>
+            <p>Explore our products</p>
         </div>
         <button class="cart-btn" (click)="cartVisible = true">
             <i class="pi pi-shopping-cart"></i>
-            <span>Carrito</span>
+            <span>Cart</span>
             @if (getCartCount() > 0) {
             <span class="cart-badge">{{ getCartCount() }}</span>
             }
         </button>
     </div>
 
-    <!-- Filtros -->
     <div class="filters">
-        <input pInputText [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Buscar productos..."
+        <input pInputText [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Search products..."
             class="search-input" />
         <p-select [(ngModel)]="selectedCategory" [options]="categories" optionLabel="label" optionValue="value"
             (onChange)="onCategoryChange()" styleClass="category-select" />
     </div>
 
-    <!-- Productos -->
     @if (loading) {
     <div class="products-grid">
         @for (i of [1,2,3,4,5,6]; track i) {
@@ -35,7 +32,7 @@
     } @else if (filteredProducts.length === 0) {
     <div class="empty-state">
         <i class="pi pi-search"></i>
-        <p>No se encontraron productos</p>
+        <p>No products found</p>
     </div>
     } @else {
     <div class="products-grid">
@@ -48,10 +45,10 @@
             </div>
             <div class="product-body">
                 <h3>{{ product.name }}</h3>
-                <p class="description">{{ product.description || 'Sin descripción' }}</p>
+                <p class="description">{{ product.description || 'No description' }}</p>
                 <div class="product-footer">
-                    <span class="price">S/ {{ product.price | number:'1.2-2' }}</span>
-                    <p-button label="Agregar" icon="pi pi-plus" size="small" (onClick)="addToCart(product)" />
+                    <span class="price">$ {{ product.price | number:'1.2-2' }}</span>
+                    <p-button label="Add" icon="pi pi-plus" size="small" (onClick)="addToCart(product)" />
                 </div>
             </div>
         </div>
@@ -61,13 +58,12 @@
 
 </div>
 
-<!-- Carrito Drawer -->
-<p-dialog header="Carrito de Compras" [(visible)]="cartVisible" [style]="{width: '480px'}" position="right"
+<p-dialog header="Shopping Cart" [(visible)]="cartVisible" [style]="{width: '480px'}" position="right"
     [modal]="true">
     @if (cart.length === 0) {
     <div class="empty-cart">
         <i class="pi pi-shopping-cart"></i>
-        <p>Tu carrito está vacío</p>
+        <p>Your cart is empty</p>
     </div>
     } @else {
     <div class="cart-items">
@@ -75,7 +71,7 @@
         <div class="cart-item">
             <div class="cart-item-info">
                 <span class="cart-item-name">{{ item.product.name }}</span>
-                <span class="cart-item-price">S/ {{ item.product.price | number:'1.2-2' }}</span>
+                <span class="cart-item-price">$ {{ item.product.price | number:'1.2-2' }}</span>
             </div>
             <div class="cart-item-actions">
                 <p-button icon="pi pi-minus" [text]="true" size="small"
@@ -94,56 +90,55 @@
 
     <div class="cart-total">
         <span>Total</span>
-        <strong>S/ {{ getCartTotal() | number:'1.2-2' }}</strong>
+        <strong>$ {{ getCartTotal() | number:'1.2-2' }}</strong>
     </div>
 
-    <p-button label="Proceder al Pago" icon="pi pi-credit-card" styleClass="w-full" (onClick)="openCheckout()" />
+    <p-button label="Proceed to Payment" icon="pi pi-credit-card" styleClass="w-full" (onClick)="openCheckout()" />
     }
 </p-dialog>
 
-<!-- Checkout Dialog -->
-<p-dialog header="Finalizar Pedido" [(visible)]="checkoutVisible" [style]="{width: '520px'}" [modal]="true">
+<p-dialog header="Finalize Order" [(visible)]="checkoutVisible" [style]="{width: '520px'}" [modal]="true">
     <div class="checkout-form">
 
         <div class="field">
-            <label>Dirección de envío</label>
-            <input pInputText [(ngModel)]="checkoutData.shippingAddress" placeholder="Av. Ejemplo 123" class="w-full" />
+            <label>Mailing address</label>
+            <input pInputText [(ngModel)]="checkoutData.shippingAddress" placeholder="Av. Example 123" class="w-full" />
         </div>
 
         <div class="field-row">
             <div class="field">
-                <label>Ciudad</label>
+                <label>City</label>
                 <input pInputText [(ngModel)]="checkoutData.shippingCity" placeholder="Lima" class="w-full" />
             </div>
             <div class="field">
-                <label>País</label>
-                <input pInputText [(ngModel)]="checkoutData.shippingCountry" placeholder="Peru" class="w-full" />
+                <label>Country</label>
+                <input pInputText [(ngModel)]="checkoutData.shippingCountry" placeholder="Italy" class="w-full" />
             </div>
         </div>
 
         <div class="field">
-            <label>Método de pago</label>
+            <label>Payment method</label>
             <p-select [(ngModel)]="checkoutData.paymentMethod" [options]="paymentMethods" optionLabel="label"
-                optionValue="value" placeholder="Selecciona un método" styleClass="w-full" />
+                optionValue="value" placeholder="Select a method" styleClass="w-full" />
         </div>
 
         <div class="field">
-            <label>Notas (opcional)</label>
-            <input pInputText [(ngModel)]="checkoutData.notes" placeholder="Instrucciones especiales..."
+            <label>Notes</label>
+            <input pInputText [(ngModel)]="checkoutData.notes" placeholder="Special instructions..."
                 class="w-full" />
         </div>
 
         <p-divider />
 
         <div class="order-summary">
-            <span>Total del pedido</span>
-            <strong>S/ {{ getCartTotal() | number:'1.2-2' }}</strong>
+            <span>Order Total</span>
+            <strong>$ {{ getCartTotal() | number:'1.2-2' }}</strong>
         </div>
 
     </div>
 
     <ng-template pTemplate="footer">
-        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="checkoutVisible = false" />
-        <p-button label="Confirmar Pedido" icon="pi pi-check" [loading]="placingOrder" (onClick)="placeOrder()" />
+        <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="checkoutVisible = false" />
+        <p-button label="Confirm Order" icon="pi pi-check" [loading]="placingOrder" (onClick)="placeOrder()" />
     </ng-template>
 </p-dialog>

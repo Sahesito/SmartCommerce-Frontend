@@ -48,14 +48,14 @@ export class UsersComponent implements OnInit {
     userForm: UserRequest = this.emptyForm();
 
     roles = [
-        { label: 'Administrador', value: 'ADMIN' },
-        { label: 'Vendedor', value: 'SELLER' },
-        { label: 'Cliente', value: 'CLIENT' }
+        { label: 'Admin', value: 'ADMIN' },
+        { label: 'Seller', value: 'SELLER' },
+        { label: 'Client', value: 'CLIENT' }
     ];
 
     statusOptions = [
-        { label: 'Activo', value: true },
-        { label: 'Inactivo', value: false }
+        { label: 'Active', value: true },
+        { label: 'Inactive', value: false }
     ];
 
     constructor(
@@ -94,7 +94,7 @@ export class UsersComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se pudieron cargar los usuarios'
+                    detail: 'Users could not be loaded'
                 });
             }
         });
@@ -127,8 +127,8 @@ export class UsersComponent implements OnInit {
         if (!this.userForm.firstName || !this.userForm.lastName || !this.userForm.email) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Campos requeridos',
-                detail: 'Nombre, apellido y correo son obligatorios'
+                summary: 'Required fields',
+                detail: 'Name, lastnames and email are required'
             });
             return;
         }
@@ -142,8 +142,8 @@ export class UsersComponent implements OnInit {
                     this.dialogVisible = false;
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Actualizado',
-                        detail: 'Usuario actualizado correctamente'
+                        summary: 'Updated',
+                        detail: 'Successfully updated user'
                     });
                     this.loadUsers();
                 },
@@ -152,7 +152,7 @@ export class UsersComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: err.error?.error || 'Error al actualizar'
+                        detail: err.error?.error || 'Error updating'
                     });
                 }
             });
@@ -163,8 +163,8 @@ export class UsersComponent implements OnInit {
                     this.dialogVisible = false;
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Creado',
-                        detail: 'Usuario creado correctamente'
+                        summary: 'Created',
+                        detail: 'Successfully created user'
                     });
                     this.loadUsers();
                 },
@@ -173,7 +173,7 @@ export class UsersComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: err.error?.error || 'Error al crear'
+                        detail: err.error?.error || 'Error creating'
                     });
                 }
             });
@@ -182,16 +182,16 @@ export class UsersComponent implements OnInit {
 
     confirmDelete(user: User): void {
         this.confirmationService.confirm({
-            message: `¿Desactivar a "${user.firstName} ${user.lastName}"?`,
-            header: 'Confirmar',
+            message: `¿Deactivate to "${user.firstName} ${user.lastName}"?`,
+            header: 'Confirm',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.userService.delete(user.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: 'Desactivado',
-                            detail: 'Usuario desactivado correctamente'
+                            summary: 'Disabled',
+                            detail: 'User successfully deactivated'
                         });
                         this.loadUsers();
                     },
@@ -199,7 +199,7 @@ export class UsersComponent implements OnInit {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'No se pudo desactivar el usuario'
+                            detail: 'The user could not be deactivated'
                         });
                     }
                 });
@@ -212,8 +212,8 @@ export class UsersComponent implements OnInit {
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Reactivado',
-                    detail: 'Usuario reactivado correctamente'
+                    summary: 'Reactivated',
+                    detail: 'User reactivated successfully'
                 });
                 this.loadUsers();
             },
@@ -221,7 +221,7 @@ export class UsersComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se pudo reactivar el usuario'
+                    detail: 'The user could not be reactivated'
                 });
             }
         });
@@ -239,8 +239,8 @@ export class UsersComponent implements OnInit {
     getRoleLabel(role: string): string {
         switch (role) {
             case 'ADMIN': return 'Admin';
-            case 'SELLER': return 'Vendedor';
-            case 'CLIENT': return 'Cliente';
+            case 'SELLER': return 'Seller';
+            case 'CLIENT': return 'Client';
             default: return role;
         }
     }

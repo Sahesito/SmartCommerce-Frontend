@@ -33,37 +33,37 @@ export class SidebarComponent implements OnInit {
             roles: ['ADMIN', 'SELLER']
         },
         {
-            label: 'Tienda',
+            label: 'Store',
             icon: 'pi pi-shopping-bag',
             route: '/shop',
             roles: ['CLIENT']
         },
         {
-            label: 'Usuarios',
+            label: 'Users',
             icon: 'pi pi-users',
             route: '/users',
             roles: ['ADMIN']
         },
         {
-            label: 'Productos',
+            label: 'Products',
             icon: 'pi pi-box',
             route: '/products',
             roles: ['ADMIN', 'SELLER']
         },
         {
-            label: 'Inventario',
+            label: 'Invetory',
             icon: 'pi pi-warehouse',
             route: '/inventory',
             roles: ['ADMIN', 'SELLER']
         },
         {
-            label: 'Pedidos',
+            label: 'Orders',
             icon: 'pi pi-shopping-cart',
             route: '/orders',
             roles: ['ADMIN', 'SELLER', 'CLIENT']
         },
         {
-            label: 'Pagos',
+            label: 'Payments',
             icon: 'pi pi-credit-card',
             route: '/payments',
             roles: ['ADMIN', 'CLIENT']

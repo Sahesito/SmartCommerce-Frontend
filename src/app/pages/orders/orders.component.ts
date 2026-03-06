@@ -53,10 +53,10 @@ export class OrdersComponent implements OnInit {
     };
 
     statusOptions = [
-        { label: 'Confirmado', value: 'CONFIRMED' },
-        { label: 'Enviado', value: 'SHIPPED' },
-        { label: 'Entregado', value: 'DELIVERED' },
-        { label: 'Cancelado', value: 'CANCELLED' }
+        { label: 'Confirme', value: 'CONFIRMED' },
+        { label: 'Shipped', value: 'SHIPPED' },
+        { label: 'Delivered', value: 'DELIVERED' },
+        { label: 'Cancel', value: 'CANCELLED' }
     ];
 
     constructor(
@@ -74,7 +74,6 @@ export class OrdersComponent implements OnInit {
     loadOrders(): void {
         this.loading = true;
 
-        // CLIENT solo ve sus pedidos
         if (this.authService.isClient()) {
             const userId = this.authService.currentUser!.id;
             this.orderService.getByUserId(userId).subscribe({
@@ -84,11 +83,10 @@ export class OrdersComponent implements OnInit {
                 },
                 error: () => {
                     this.loading = false;
-                    this.showError('No se pudieron cargar los pedidos');
+                    this.showError('The orders could not be loaded.');
                 }
             });
         } else {
-            // ADMIN y SELLER ven todos
             this.orderService.getAll().subscribe({
                 next: (orders) => {
                     this.orders = orders;
@@ -96,7 +94,7 @@ export class OrdersComponent implements OnInit {
                 },
                 error: () => {
                     this.loading = false;
-                    this.showError('No se pudieron cargar los pedidos');
+                    this.showError('The orders could not be loaded.');
                 }
             });
         }
@@ -138,8 +136,8 @@ export class OrdersComponent implements OnInit {
                 this.statusDialogVisible = false;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Actualizado',
-                    detail: 'Estado del pedido actualizado'
+                    summary: 'Update',
+                    detail: 'Order status updated'
                 });
                 this.loadOrders();
             },
@@ -148,7 +146,7 @@ export class OrdersComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: err.error?.error || 'Error al actualizar estado'
+                    detail: err.error?.error || 'Error updating status'
                 });
             }
         });
@@ -156,16 +154,16 @@ export class OrdersComponent implements OnInit {
 
     confirmCancel(order: Order): void {
         this.confirmationService.confirm({
-            message: `¿Cancelar el pedido #${order.id}?`,
-            header: 'Confirmar cancelación',
+            message: `¿Cancel order #${order.id}?`,
+            header: 'Confirm cancellation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.orderService.cancel(order.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'info',
-                            summary: 'Pedido cancelado',
-                            detail: `Pedido #${order.id} cancelado. Desaparecerá en 10 segundos.`
+                            summary: 'Canceled order',
+                            detail: `Order #${order.id} cancel. It will disappear in 10 seconds.`
                         });
 
                         if (this.authService.isClient()) {
@@ -181,7 +179,7 @@ export class OrdersComponent implements OnInit {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: err.error?.error || 'No se pudo cancelar'
+                            detail: err.error?.error || 'Could not cancel'
                         });
                     }
                 });
@@ -191,21 +189,21 @@ export class OrdersComponent implements OnInit {
 
     confirmDelete(order: Order): void {
         this.confirmationService.confirm({
-            message: `¿Eliminar el pedido #${order.id}? Esta acción es permanente.`,
-            header: 'Eliminar pedido',
+            message: `¿Delete the order #${order.id}? This action is permanent.`,
+            header: 'Delete order',
             icon: 'pi pi-trash',
             accept: () => {
                 this.orderService.delete(order.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: 'Eliminado',
-                            detail: `Pedido #${order.id} eliminado`
+                            summary: 'Delete',
+                            detail: `Order #${order.id} delete`
                         });
                         this.loadOrders();
                     },
                     error: () => {
-                        this.showError('No se pudo eliminar el pedido');
+                        this.showError('The order could not be deleted');
                     }
                 });
             }
@@ -225,11 +223,11 @@ export class OrdersComponent implements OnInit {
 
     getStatusLabel(status: string): string {
         switch (status) {
-            case 'PENDING': return 'Pendiente';
-            case 'CONFIRMED': return 'Confirmado';
-            case 'SHIPPED': return 'Enviado';
-            case 'DELIVERED': return 'Entregado';
-            case 'CANCELLED': return 'Cancelado';
+            case 'PENDING': return 'Pending';
+            case 'CONFIRMED': return 'Confirmed';
+            case 'SHIPPED': return 'Shipped';
+            case 'DELIVERED': return 'Delivered';
+            case 'CANCELLED': return 'Cancel';
             default: return status;
         }
     }
